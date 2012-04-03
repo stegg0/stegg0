@@ -1,5 +1,6 @@
 require_relative 'flickr'
 require 'RMagick'
+require 'fileutils'
 
 module Images
 
@@ -41,10 +42,18 @@ module Images
     for counter in (1..9)
       pngName = "./images/" + counter.to_s() + ".png"
       image = Magick::Image.read(pngName).first
-      # Make the new image 25% larger
-      thumb = image.scale(1.25)
+      # Make the new image 5% larger
+      thumb = image.scale(1.05)
       thumb.write(pngName)
     end
   end
 
+  # FUNCTION: Delete images
+  def deleteImages
+    # Remove the images directory
+    FileUtils.rm_rf('./images/')
+
+    # Create the images directory
+    FileUtils.mkdir('./images/')
+  end
 end
