@@ -1,3 +1,11 @@
+############################################
+# Flickr                                   #
+#------------------------------------------#
+# This library allows us to grab links to  #
+# interesting images on Flickr.  Thanks to #
+# drawohara.com for the code.              #
+############################################
+
 require 'open-uri'
 
 module Flickr

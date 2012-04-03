@@ -1,3 +1,12 @@
+##################################################
+# Images                                         #
+#------------------------------------------------#
+# This library allows us to utilize the Flickr   #
+# library to select sets of 9 random interesting #
+# images and download them into the image        #
+# directory for use with our program.            #
+##################################################
+
 require_relative 'flickr'
 require 'RMagick'
 require 'fileutils'
