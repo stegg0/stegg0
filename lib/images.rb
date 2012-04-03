@@ -6,6 +6,12 @@ module Images
 
   # FUNCTION: Get images from Flickr
   def getImages
+    # If the images directory does not exist
+    if (!File.directory?('./images'))
+      # Create the images directory
+      FileUtils.mkdir('./images/')
+    end
+
     # Counter for image file names
     counter = 1
 
@@ -50,8 +56,11 @@ module Images
 
   # FUNCTION: Delete images
   def deleteImages
-    # Remove the images directory
-    FileUtils.rm_rf('./images/')
+    # If the images directory exists
+    if (File.directory?('./images'))
+      # Remove the images directory
+      FileUtils.rm_rf('./images/')
+    end
 
     # Create the images directory
     FileUtils.mkdir('./images/')
