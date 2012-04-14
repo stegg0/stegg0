@@ -57,10 +57,31 @@ module Images
     for counter in (1..9)
       pngName = "./images/" + counter.to_s() + ".png"
       image = Magick::Image.read(pngName).first
-      # Make the new image 5% larger
-      thumb = image.scale(1.05)
+
+      # Create a random number from 0.01 to 0.1
+      random = rand(0.01..0.1)
+
+      # Make the new image larger by the random number percent
+      value = 1 + random
+      thumb = image.scale(value)
       thumb.write(pngName)
     end
+  end
+
+  # FUNCTION: Get number of pixels in image
+  def numberOfPixels(image)
+    # Suck in the image
+    image = Magick::Image.read(image).first
+
+    # Get the number of rows and columns
+    columns = image.columns
+    rows = image.rows
+
+    # Calculate the number of pixels
+    pixels = columns * rows
+
+    # Return the number of pixels
+    return pixels
   end
 
   # FUNCTION: Delete images
