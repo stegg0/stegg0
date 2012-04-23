@@ -6,23 +6,15 @@
 
 require './lib/images'
 require './lib/stegg'
+require './lib/aescrypt'
 
 include Images
 include Stegg
+include AESCrypt
 
-#Images.getImages
-#Images.resizeImages
-#Images.deleteImages
-#text = "It works!!!"
-#binary = Stegg.convertStringToBinary(text)
-#binaryArray = File.open("data.txt", "r").read
-#puts(Stegg.getBits(binary))
-
-#puts(binary)
-
-#str = Stegg.convertBinaryToString(binary)
-
-#puts(str)
+# Variables
+iv = nil
+cipher_type = "AES-256-CBC"
 
 # Print initialization
 puts("Initializing.  Please wait...")
@@ -39,10 +31,13 @@ Images.resizeImages
 # Counter for image file names
 counter = 1
 
-# Get the shared secret key
+# Get the shared secret password
 print("ENTER THE SHARED SECRET KEY: ")
 input = gets
-key = input.split.join("\n")
+password = input.split.join("\n")
+
+# Convert the password into a sufficiently long key
+key = AESCrypt.getKey(password)
 
 # Get the image repository type
 puts("Repository Types...")
@@ -69,8 +64,8 @@ while (input != "quit\n")
 
   # Otherwise do the normal steggo thing
   else
-    # TODO: Encrypt the input with the key
-    encrypted_input = input
+    # Encrypt the input with the key
+    encrypted_input = AESCrypt.encrypt(input, key, iv, cipher_type)
 
     # Convert the encrypted input to a binary value
     binary = Stegg.convertStringToBinary(encrypted_input)
@@ -87,6 +82,7 @@ while (input != "quit\n")
     # Get the number of bits that can be utilized in the image
     # 3 bits (RGB) per pixel
     image_bits = pixels * 3
+
 
     puts(image_bits)
     
