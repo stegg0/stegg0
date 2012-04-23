@@ -6,11 +6,20 @@
 
 require './lib/images'
 require './lib/stegg'
+<<<<<<< HEAD
 require './lib/aescrypt'
 
 include Images
 include Stegg
 include AESCrypt
+=======
+require './lib/imageshack'
+
+include Images
+include Stegg
+include Imageshack
+
+>>>>>>> ImageShack
 
 # Variables
 iv = nil
@@ -46,6 +55,10 @@ puts("* ftp")
 print("ENTER REPOSITORY TYPE: ")
 input = gets
 repository = input.split.join("\n")
+
+# Print testing imageshack
+puts("Imageshack Test.  Please wait...")
+puts(Imageshack.uploadImage("images/1.png"))
 
 # While the user does not enter "quit" followed by a return character
 while (input != "quit\n")
