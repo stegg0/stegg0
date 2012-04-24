@@ -6,20 +6,16 @@
 
 require './lib/images'
 require './lib/stegg'
-<<<<<<< HEAD
 require './lib/aescrypt'
+require './lib/imageshack'
+require './lib/imgur'
 
 include Images
 include Stegg
 include AESCrypt
-=======
-require './lib/imageshack'
-
-include Images
-include Stegg
 include Imageshack
+include Imgur
 
->>>>>>> ImageShack
 
 # Variables
 iv = nil
@@ -40,6 +36,21 @@ Images.resizeImages
 # Counter for image file names
 counter = 1
 
+# Print testing imageshack
+#puts("\n\nImageshack Test.  Please wait...")
+#puts(Imageshack.uploadImage("images/1.png"))
+
+# Print testing imgur
+puts("\n\nImgur Test.  Please wait...")
+imgur_array = Imgur.uploadImage("images/1.png")
+img_link = imgur_array[0]
+delete_hash = imgur_array[1]
+
+Imgur.deleteImage(delete_hash[0])
+
+exit
+
+
 # Get the shared secret password
 print("ENTER THE SHARED SECRET KEY: ")
 input = gets
@@ -56,9 +67,6 @@ print("ENTER REPOSITORY TYPE: ")
 input = gets
 repository = input.split.join("\n")
 
-# Print testing imageshack
-puts("Imageshack Test.  Please wait...")
-puts(Imageshack.uploadImage("images/1.png"))
 
 # While the user does not enter "quit" followed by a return character
 while (input != "quit\n")

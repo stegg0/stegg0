@@ -24,11 +24,16 @@ module Imageshack
                     :fileupload => File.new(image_path),
                     :key => "25DMPRTW1ebeb27c11f266b9758923507ba8d08d")
       #puts(response.to_str)
+      case response.code
+          when 200
       xml_data = response.to_str
       data = XmlSimple.xml_in(xml_data)
       #puts(data)
       image_link = data["links"][0]["image_link"]
       return (image_link)
+          else
+          return 0 
+          end
   end
 
 end
