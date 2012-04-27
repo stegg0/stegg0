@@ -1,0 +1,3 @@
+GEMS TO INSTALL
+gem install rest-client
+gem install xml-simple

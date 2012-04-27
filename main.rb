@@ -41,14 +41,14 @@ counter = 1
 #puts(Imageshack.uploadImage("images/1.png"))
 
 # Print testing imgur
-puts("\n\nImgur Test.  Please wait...")
-imgur_array = Imgur.uploadImage("images/1.png")
-img_link = imgur_array[0]
-delete_hash = imgur_array[1]
+#puts("\n\nImgur Test.  Please wait...")
+#imgur_array = Imgur.uploadImage("images/1.png")
+#img_link = imgur_array[0]
+#delete_hash = imgur_array[1]
 
-Imgur.deleteImage(delete_hash[0])
+#Imgur.deleteImage(delete_hash[0])
 
-exit
+#exit
 
 
 # Get the shared secret password
@@ -104,8 +104,11 @@ while (input != "quit\n")
     # 3 bits (RGB) per pixel
     image_bits = pixels * 3
 
-
-    puts(image_bits)
-    
+    # If the data_bits is less than or equal to the image bits
+    # TODO: We need to still account for data bits larger than the image bits over multiple images
+    if (data_bits <= image_bits)
+      # Embed the data in the image
+      Stegg.embed(binary[0], pngName)
+    end
   end
 end
