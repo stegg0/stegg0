@@ -52,6 +52,9 @@ module Stegg
       # Create a new empty image to modify
       new_image = Magick::Image.new(original_image.columns, original_image.rows)
 
+      # Initialize the new_pixels array
+      @new_pixels = []
+
       # For each pixel in the original image
       # For 8-bit QuantumDepth the QuantumRange is 255
       # For 16-bit QuantumDepth the QuantumRange is 65535
@@ -62,6 +65,11 @@ module Stegg
         data2 = ""
         data3 = ""
 
+        # Set colors to their current value
+        red = pixel.red
+        green = pixel.green
+        blue = pixel.blue
+
         # If the data is not empty
         # Grab the first character of data
         if (data.length > 0)
@@ -69,13 +77,17 @@ module Stegg
           data.slice!(0)
           
           # If the data is even and the red pixel is odd
-          if ((data1%2 == "0") && (pixel.red%2 == 1))
-            puts("Change red to even")
+          if ((data1%2 == "0") && (red%2 == 1))
+            # Change the red to even
+            #puts("Change red to even")
+            red = red - 1
           end
 
           # If the data is odd and the red pixel is even
-          if ((data1%2 == "1") && (pixel.red%2 == 0))
-            puts("Change red to odd")
+          if ((data1%2 == "1") && (red%2 == 0))
+            # Change the red to odd
+            #puts("Change red to odd")
+            red = red + 1
           end
         end
 
@@ -86,13 +98,17 @@ module Stegg
           data.slice!(0)
 
           # If the data is even and the green pixel is odd
-          if ((data2%2 == "0") && (pixel.green%2 == 1))
-            puts("Change green to even")
+          if ((data2%2 == "0") && (green%2 == 1))
+            # Change the green to even
+            #puts("Change green to even")
+            green = green - 1
           end
         
           # If the data is odd and the green pixel is even
-          if ((data2%2 == "1") && (pixel.green%2 == 0))
-            puts("Change green to odd")
+          if ((data2%2 == "1") && (green%2 == 0))
+            # Change the green to odd
+            #puts("Change green to odd")
+            green = green + 1
           end
         end
 
@@ -103,38 +119,40 @@ module Stegg
           data.slice!(0)
 
           # If the data is even and the blue pixel is odd
-          if ((data3%2 == "0") && (pixel.blue%2 == 1))
-            puts("Change blue to even")
+          if ((data3%2 == "0") && (blue%2 == 1))
+            # Change the blue to even
+            #puts("Change blue to even")
+            blue = blue - 1
           end
         
           # If the data is odd and the blue pixel is even
-          if ((data3%2 == "1") && (pixel.blue%2 == 0))
-            puts("Change blue to odd")
+          if ((data3%2 == "1") && (blue%2 == 0))
+            # Change the blue to odd
+            #puts("Change blue to odd")
+            blue = blue + 1
           end
         end
 
+        # Save the pixel to the pixel array
+        @new_pixels << Magick::Pixel.new(red, green, blue, 0)
+        #new_image.store_pixels(col, row, 1, 1, new_pixel)
+
         #puts "Pixel at: #{col}x#{row}:
-        #\tR: #{pixel.red}, G: #{pixel.green}, B: #{pixel.blue}"
+        #\tR: #{new_pixel.red}, G: #{new_pixel.green}, B: #{new_pixel.blue}"
       end
 
-      # Write out the new image
-      new_image.write("./images/1-steg.png")
-    end
+      # Write out the new pixel array
+      new_image.store_pixels(0, 0, new_image.columns, new_image.rows, @new_pixels)
 
-    # For images 1-9
-    # Get the height and width of the image
-    # Determine the total number of pixels
-    # If the data is bigger than what we can store in the 9 images
-    # Figure out which kind of bit it is
-    #switch (bit)
-    #  case '1':
-        # If the color is not an odd number
-        # Increase it
-    #  case '0':
-        # If the color is not an even number
-        # Decrease it
-    # Fetch 9 more images and repeat
-    # Return the number of bits used 
+      # Create a random image name
+      image_name = Array.new(10){rand(36).to_s(36)}.join
+
+      # Write out the new image
+      new_image.write("./images/#{image_name}.png")
+
+      # Return the image name we wrote to
+      return "#{image_name}.png"
+    end
   end
 
 end
