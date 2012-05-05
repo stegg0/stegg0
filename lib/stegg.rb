@@ -22,7 +22,7 @@ module Stegg
   # FUNCTION: Convert binary to a string
   def convertBinaryToString(binary)
     # Use the pack function to encode the binary
-    str = binary.pack('b*')
+    str = [binary].pack('b*')
     return str
   end
 
@@ -33,7 +33,7 @@ module Stegg
   end
 
   # FUNCTION: Set the RGB value
-  def embed(data, image)
+  def imageSteg(data, image)
     # Suck in the image
     original_image = Magick::Image.read(image).first
 
@@ -153,6 +153,63 @@ module Stegg
       # Return the image name we wrote to
       return "#{image_name}.png"
     end
+  end
+
+  # FUNCTION: Extract the data
+  def imageDeSteg(key, image)
+    # Suck in the image
+    original_image = Magick::Image.read(image).first
+
+    # Initialize the bits array
+    bits = []
+
+    # For each pixel in the image
+    original_image.each_pixel do |pixel, col, row|
+       # Set colors to their current value
+       red = pixel.red
+       green = pixel.green
+       blue = pixel.blue
+
+       # If the red value for the pixel is odd
+       if (red%2 == 1)
+         bits << 1
+       else
+         bits << 0
+       end
+
+       # If the green value for the pixel is odd
+       if (green%2 == 1)
+         bits << 1
+       else
+         bits << 0
+       end
+
+       # If the blue value for the pixel is odd
+       if (blue%2 == 1)
+         bits << 1
+       else
+         bits << 0
+       end
+    end
+
+    # Initialize the encrypted_length_bits
+    encrypted_length_bits = ""
+
+    # For the first 128 characters in the array
+    for counter in (0..127)
+      # Append the value to the encrypted_length_bits
+      encrypted_length_bits = encrypted_length_bits + bits[counter].to_s()
+    end
+
+    # Convert the binary encrypted length bits to a string
+    encrypted_length = Stegg.convertBinaryToString(encrypted_length_bits)
+
+    # Variables
+    iv = nil
+    cipher_type = "AES-256-CBC"
+
+    # Decrypt the encrypted length
+    length = AESCrypt.decrypt(encrypted_length, key, iv, cipher_type)
   end
 
 end

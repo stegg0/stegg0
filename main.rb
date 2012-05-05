@@ -92,7 +92,18 @@ while (input != "quit\n")
     binary = Stegg.convertStringToBinary(encrypted_input)
 
     # Get the number of bits for the binary value
+    # This should be a multiple of 128 using AES encryption
     data_bits = Stegg.getBits(binary)
+
+    # Encrypt the length bits
+    encrypted_length_bits = AESCrypt.encrypt(data_bits.to_s(), key, iv, cipher_type)
+
+    # Convert the encrypted length bits to a binary value
+    # This should be 128 bits using AES encryption
+    binary_length = Stegg.convertStringToBinary(encrypted_length_bits)
+
+    # Data is the binary_length + binary data
+    data = binary_length[0] + binary[0]
 
     # Get the current image name
     pngName = "./images/" + counter.to_s() + ".png"
@@ -104,11 +115,14 @@ while (input != "quit\n")
     # 3 bits (RGB) per pixel
     image_bits = pixels * 3
 
-    # If the data_bits is less than or equal to the image bits
+    # If the data bits is less than or equal to the image bits
     # TODO: We need to still account for data bits larger than the image bits over multiple images
-    if (data_bits <= image_bits)
-      # Embed the data in the image
-      Stegg.embed(binary[0], pngName)
+    if (Stegg.getBits(data) <= image_bits)
+      # Steggo the data in the image and get the random image name returned
+      random_image = Stegg.imageSteg(data, pngName)
+      
+      # Desteggo the data from the image
+      Stegg.imageDeSteg(key, "./images/" + random_image)
     end
   end
 end
