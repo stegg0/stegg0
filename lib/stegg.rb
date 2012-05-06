@@ -10,6 +10,10 @@ require 'RMagick'
 
 include Images
 
+# Global Variables
+$iv = nil
+$cipher_type = "AES-256-CBC"
+
 module Stegg
   
   # FUNCTION: Convert a string to a binary value
@@ -33,12 +37,9 @@ module Stegg
   end
 
   # FUNCTION: Set the RGB value
-  def imageSteg(data, image)
+  def imageSteg(data, key, image)
     # Suck in the image
     original_image = Magick::Image.read(image).first
-
-    # Get the number of bits in the data
-    data_bits = data.length
 
     # Get the number of pixels in the current image
     pixels = Images.numberOfPixels(image)
@@ -47,8 +48,28 @@ module Stegg
     # 3 bits (RGB) per pixel
     image_bits = pixels * 3
 
+    # Encrypt the data with the key
+    encrypted_data = AESCrypt.encrypt(data, key, $iv, $cipher_type)
+
+    # Convert the encrypted input to a binary value
+    binary = Stegg.convertStringToBinary(encrypted_data)
+
+    # Get the number of bits for the binary value
+    # This should be a multiple of 128 using AES encryption
+    data_bits = Stegg.getBits(binary)
+
+    # Encrypt the length bits
+    encrypted_length_bits = AESCrypt.encrypt(data_bits.to_s(), key, $iv, $cipher_type)
+
+    # Convert the encrypted length bits to a binary value
+    # This should be 128 bits using AES encryption
+    binary_length = Stegg.convertStringToBinary(encrypted_length_bits)
+
+    # Data is the binary_length + binary data
+    data = binary_length[0] + binary[0]
+
     # Make sure we don't have more data than the image can handle
-    if (data_bits <= image_bits)
+    if (data.length <= image_bits)
       # Create a new empty image to modify
       new_image = Magick::Image.new(original_image.columns, original_image.rows)
 
@@ -204,12 +225,8 @@ module Stegg
     # Convert the binary encrypted length bits to a string
     encrypted_length = Stegg.convertBinaryToString(encrypted_length_bits)
 
-    # Variables
-    iv = nil
-    cipher_type = "AES-256-CBC"
-
     # Decrypt the encrypted length
-    length = AESCrypt.decrypt(encrypted_length, key, iv, cipher_type)
+    length = AESCrypt.decrypt(encrypted_length, key, $iv, $cipher_type)
 
     # Initialize the encrypted_data_bits
     encrypted_data_bits = ""
@@ -227,7 +244,7 @@ module Stegg
     encrypted_data = Stegg.convertBinaryToString(encrypted_data_bits)
 
     # Decrypte the encrypted data
-    data = AESCrypt.decrypt(encrypted_data, key, iv, cipher_type)
+    data = AESCrypt.decrypt(encrypted_data, key, $iv, $cipher_type)
 
     # Return the data
     return data

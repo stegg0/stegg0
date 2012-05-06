@@ -85,45 +85,16 @@ while (input != "quit\n")
 
   # Otherwise do the normal steggo thing
   else
-    # Encrypt the input with the key
-    encrypted_input = AESCrypt.encrypt(input, key, iv, cipher_type)
-
-    # Convert the encrypted input to a binary value
-    binary = Stegg.convertStringToBinary(encrypted_input)
-
-    # Get the number of bits for the binary value
-    # This should be a multiple of 128 using AES encryption
-    data_bits = Stegg.getBits(binary)
-
-    # Encrypt the length bits
-    encrypted_length_bits = AESCrypt.encrypt(data_bits.to_s(), key, iv, cipher_type)
-
-    # Convert the encrypted length bits to a binary value
-    # This should be 128 bits using AES encryption
-    binary_length = Stegg.convertStringToBinary(encrypted_length_bits)
-
-    # Data is the binary_length + binary data
-    data = binary_length[0] + binary[0]
-
     # Get the current image name
     pngName = "./images/" + counter.to_s() + ".png"
 
-    # Get the number of pixels in the current image
-    pixels = Images.numberOfPixels(pngName)
+    # TODO: We need to come up with a good way to make sure the data will fit in the image or split it up over multiple images
 
-    # Get the number of bits that can be utilized in the image
-    # 3 bits (RGB) per pixel
-    image_bits = pixels * 3
-
-    # If the data bits is less than or equal to the image bits
-    # TODO: We need to still account for data bits larger than the image bits over multiple images
-    if (Stegg.getBits(data) <= image_bits)
-      # Steggo the data in the image and get the random image name returned
-      random_image = Stegg.imageSteg(data, pngName)
+    # Steggo the data in the image and get the random image name returned
+    random_image = Stegg.imageSteg(input, key, pngName)
       
-      # Desteggo the data from the image
-      data = Stegg.imageDeSteg(key, "./images/" + random_image)
-      puts("Image Data: #{data}")
-    end
+    # Desteggo the data from the image
+    data = Stegg.imageDeSteg(key, "./images/" + random_image)
+    puts("Image Data: #{data}")
   end
 end

@@ -36,4 +36,8 @@ The following Ruby gems are required to be installed in order for this tool to w
 
 Future To Do's
 --------------
+* We need to come up with a good way to make sure the data will fit in the image or split it up over multiple images
+
 * Could add a random offset of the data in the image if the data size is sufficiently smaller than the image size.
+
+* Need to add code to rotate through the images we download instead of just using the first image.
