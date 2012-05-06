@@ -210,6 +210,27 @@ module Stegg
 
     # Decrypt the encrypted length
     length = AESCrypt.decrypt(encrypted_length, key, iv, cipher_type)
+
+    # Initialize the encrypted_data_bits
+    encrypted_data_bits = ""
+
+    # Data starts at 128 and goes through the length
+    last_bit = 127 + length.to_i()
+ 
+    # For character 128 through the last bit
+    for counter in (128..last_bit)
+      # Append the value to the encrypted_data_bits
+      encrypted_data_bits = encrypted_data_bits + bits[counter].to_s()
+    end
+
+    # Convert the binary encrypted data bits to a string
+    encrypted_data = Stegg.convertBinaryToString(encrypted_data_bits)
+
+    # Decrypte the encrypted data
+    data = AESCrypt.decrypt(encrypted_data, key, iv, cipher_type)
+
+    # Return the data
+    return data
   end
 
 end

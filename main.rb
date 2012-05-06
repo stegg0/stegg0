@@ -122,7 +122,8 @@ while (input != "quit\n")
       random_image = Stegg.imageSteg(data, pngName)
       
       # Desteggo the data from the image
-      Stegg.imageDeSteg(key, "./images/" + random_image)
+      data = Stegg.imageDeSteg(key, "./images/" + random_image)
+      puts("Image Data: #{data}")
     end
   end
 end
