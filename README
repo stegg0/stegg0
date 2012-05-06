@@ -1,3 +1,39 @@
-GEMS TO INSTALL
-gem install rest-client
-gem install xml-simple
+###############################################
+# Stegg0 v2.0                                 #
+# Written by: Josh Sokol & Orlando Barrera II #
+###############################################
+
+About Stegg0 v1.0
+-----------------
+Stegg0 v2.0 represents the continuation of the research originally peformed by Josh Sokol and Orlando Barrera II that was presented at the BSides Las Vegas Conference in 2011.  At that time, they introduced Stegg0 v1.0 that allowed a user to select a file and provide a password and have it broekn into chunks, encrypted, and distributed to a remote image repository.  While not having a steganographny client present on your system does provide some plausible deniability, there are still some major drawbacks to the Stegg0 v1.0 approach:
+
+* Source images were pulled from a public IMDB image database with no attempts made to obscure them.  Direct comparisons could be made between the original and embedded images.
+
+* The purely LSB method of steganography used is easily detected with current steganalysis techniques.
+
+* Browser and proxy caching of uploaded data could further erode plausible deniability.
+
+* Data on chunk checksums and file locations for each project was stored in a local database.
+
+* During the upload process files were stored in a temporary directory before processing could take place.  Evidence could potentially be obtained from file system analysis at a later point.
+
+* The very fact that the files needed to be uploaded to a remote server controlled by us created a scenario where the application users had to trust us not to view or manipulate their data.
+
+Due to the above factors and limitations with the original Stegg0 tool, we decided to discontinue work on the project and began working on Stegg0 v2.0
+
+About Stegg0 v2.0
+-----------------
+Steggo v2.0 is designed to be run as a client.  It requires a repository where it can both read and write a single image file.  This image file then acts as an index for all of the other image files containing the actual data.  By simply referencing the index image and providing the proper credentials, we can facilitate communications from multiple clients at once.
+
+This tool uses the LSB method of steganography to embed data in an image.  With this method we are effectively able to store 3 x image length x image width bits of data per image file.  Because we use AES-256 encryption for all data stored, we utilize some multiple of 128 bits worth of data.  We also reserve the first 128 bits in the image for an encrypted data length value.  This is required so that we can tell where our encrypted data ends and the original image pixels begin in the image.
+
+Required Ruby Gems
+------------------
+The following Ruby gems are required to be installed in order for this tool to work properly:
+
+* gem install rest-client
+* gem install xml-simple
+
+Future To Do's
+--------------
+* Could add a random offset of the data in the image if the data size is sufficiently smaller than the image size.
