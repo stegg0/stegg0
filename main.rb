@@ -39,9 +39,7 @@ print("ENTER THE SHARED SECRET KEY: ")
 input = gets
 password = input.split.join("\n")
 
-# Get the shared secret password
-print("ENTER A USERNAME: ")
-username  = gets.chomp
+
 
 # Convert the password into a sufficiently long key
 key = AESCrypt.getKey(password)
@@ -73,7 +71,9 @@ while (input != "quit")
         exit
     end
     if input == "comment" then
-
+        # Get a username
+        print("ENTER A USERNAME: ")
+        username  = gets.chomp
         # Print initialization
         puts("Initializing.  Please wait...")
         
