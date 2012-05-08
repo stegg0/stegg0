@@ -35,7 +35,7 @@ ftpDir = "\\stegg0"
 
 
 # Get the shared secret password
-print("ENTER THE SHARED SECRET KEY: ")
+print("ENTER THE SHARED SECRET KEY> ")
 input = gets
 password = input.split.join("\n")
 
@@ -72,8 +72,10 @@ while (input != "quit")
     end
     if input == "comment" then
         # Get a username
-        print("ENTER A USERNAME: ")
+        print("ENTER A USERNAME> ")
         username  = gets.chomp
+        print("ENTER A CHANNEL NAME> ")
+        channel  = gets.chomp
         # Print initialization
         puts("Initializing.  Please wait...")
         
@@ -94,8 +96,8 @@ while (input != "quit")
               print("Stegg0ing Please Wait...\n")
               # Get the current image name
               pngName = "./images/" + counter.to_s() + ".png"
-              nodePng = "node.png"
-              downloadPath = "./images/node.png"
+              nodePng = channel+".png"
+              downloadPath = "./images/"+channel
               # TODO: We need to come up with a good way to make sure the data will fit in the image or split it up over multiple images
               
               # Steggo the data in the image and get the random image name returned
@@ -134,14 +136,16 @@ while (input != "quit")
     end
     if input == "read" then
         # Print a text prompt
+        print("ENTER A CHANNEL NAME> ")
+        channel  = gets.chomp
         print("DeStegg0ing Please Wait...\n")
         # If the images directory does not exist
         if (!File.directory?('./images'))
             # Create the images directory
             FileUtils.mkdir('./images/')
         end
-        nodePng = "node.png"
-        downloadPath = "./images/node.png"
+        nodePng = channel+".png"
+        downloadPath = "./images/"+channel
         #get old node png and append to end of data
         fileExists = Ftp.ftpDownload(ftpServer, ftpUser, ftpPass, ftpDir, downloadPath, nodePng)
         nodeData = ""
