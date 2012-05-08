@@ -39,6 +39,10 @@ print("ENTER THE SHARED SECRET KEY: ")
 input = gets
 password = input.split.join("\n")
 
+# Get the shared secret password
+print("ENTER A USERNAME: ")
+username  = gets.chomp
+
 # Convert the password into a sufficiently long key
 key = AESCrypt.getKey(password)
 
@@ -116,7 +120,7 @@ while (input != "quit")
             end
         #if node file does not exists then just create it with the new url list
         #save both link locations to end of txt file
-              comment_links = imageshack_link[0].to_s+"\t"+imgur_link[0].to_s+"\n"
+              comment_links = imageshack_link[0].to_s+"\t"+imgur_link[0].to_s+"\t"+username+"\n"
               newNodeData = nodeData+comment_links
         #puts(newNodeData)
               counter = counter+1
@@ -149,6 +153,7 @@ while (input != "quit")
                 urlArray = line.split(/\t/)
                 #puts("Imageshack: "+ urlArray[0])
                 #puts("Imgur: "+ urlArray[1])
+                temp_username = urlArray[2]
                 # Desteggo the data from the image
                 imageCount = 1
                 imagePath = "./images/" + imageCount.to_s() + ".png"
@@ -169,7 +174,7 @@ while (input != "quit")
                 #if imageshack had the file then destegg
                     if fileExists == true then
                         data = Stegg.imageDeSteg(key, imagePath)
-                        puts("> #{data}")  
+                        puts(temp_username+"> #{data}")  
                         imageCount = imageCount+1
                     end
                 #if imageshack did not have the file then get the redundant file from imgur
@@ -189,7 +194,7 @@ while (input != "quit")
                         fileExists = File.exist? imagePath
                         if fileExists == true then
                             data = Stegg.imageDeSteg(key, imagePath)
-                            puts("> #{data}")  
+                            puts(temp_username+"> #{data}")  
                             imageCount = imageCount+1
                         end
                         if fileExists == false then
