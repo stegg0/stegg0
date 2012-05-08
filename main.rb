@@ -87,6 +87,7 @@ while (input != "quit")
               
               # Get user input
               input = gets.chomp
+              print("Stegg0ing Please Wait...\n")
               # Get the current image name
               pngName = "./images/" + counter.to_s() + ".png"
               nodePng = "node.png"
@@ -117,7 +118,7 @@ while (input != "quit")
         #save both link locations to end of txt file
               comment_links = imageshack_link[0].to_s+"\t"+imgur_link[0].to_s+"\n"
               newNodeData = nodeData+comment_links
-              puts(newNodeData)
+        #puts(newNodeData)
               counter = counter+1
               nodePngTemp = "./images/" + counter.to_s() + ".png"
               node_image = Stegg.imageSteg(newNodeData, key, nodePngTemp)
@@ -129,7 +130,7 @@ while (input != "quit")
     end
     if input == "read" then
         # Print a text prompt
-        print("Please Wait...\n")
+        print("DeStegg0ing Please Wait...\n")
         # If the images directory does not exist
         if (!File.directory?('./images'))
             # Create the images directory
@@ -164,12 +165,38 @@ while (input != "quit")
                         }
                     }
                 }
-
-                
-                data = Stegg.imageDeSteg(key, imagePath)
-                puts("> #{data}")  
-                imageCount = imageCount+1
-                 end 
+                fileExists = File.exist? imagePath
+                #if imageshack had the file then destegg
+                    if fileExists == true then
+                        data = Stegg.imageDeSteg(key, imagePath)
+                        puts("> #{data}")  
+                        imageCount = imageCount+1
+                    end
+                #if imageshack did not have the file then get the redundant file from imgur
+                    if fileExists == false then
+                        url = urlArray[1].to_s
+                        uri = URI.parse(url)
+                        http = Net::HTTP.new(uri.host, uri.port)
+                        http.use_ssl = true if uri.scheme == "https"
+                        http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+                        http.start {
+                            http.request_get(uri.path) {|res|
+                                File.open(imagePath,'wb') { |f|
+                                    f.write(res.body)
+                                }
+                            }
+                        }
+                        fileExists = File.exist? imagePath
+                        if fileExists == true then
+                            data = Stegg.imageDeSteg(key, imagePath)
+                            puts("> #{data}")  
+                            imageCount = imageCount+1
+                        end
+                        if fileExists == false then
+                            puts("No file? Something is Screwed up!")
+                        end
+                    end
+                end 
 
             
             
