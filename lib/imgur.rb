@@ -14,7 +14,7 @@ require 'xmlsimple'
 module Imgur
 
   # FUNCTION: Upload Image to Imgur
-  def uploadImage(image_path)
+  def uploadImagur(image_path)
       response = RestClient.post('http://api.imgur.com/2/upload.xml', 
                     :image => File.new(image_path),
                     :key => "d82636dc23e1520c9b074fd4c1bbd451")
@@ -36,7 +36,7 @@ module Imgur
   end
     
     # FUNCTION: Delet image on Imgur with delete hash
-    def deleteImage(delete_hash)
+    def deleteImagur(delete_hash)
         response = RestClient.get('http://api.imgur.com/2/delete/'+delete_hash)
         case response.code
             when 200
