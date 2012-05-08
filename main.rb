@@ -10,6 +10,10 @@ require './lib/aescrypt'
 require './lib/imageshack'
 require './lib/imgur'
 require './lib/ftp'
+require 'net/http'
+require 'fileutils'
+require 'net/https'
+require 'uri'
 
 include Images
 include Stegg
@@ -61,6 +65,7 @@ while (input != "quit")
     if input == "quit" then
 
         puts("Quitting...")
+        FileUtils.rm_rf("images/", secure: true)
         exit
     end
     if input == "comment" then
@@ -93,10 +98,10 @@ while (input != "quit")
               random_image = "./images/"+random_image
               # put the image and data on cloud
               imageshack_link =  Imageshack.uploadImage(random_image)
-              puts("imageshack: "+imageshack_link[0].to_s)
+              #puts("Imageshack: "+imageshack_link[0].to_s)
               imgur_array = Imgur.uploadImagur(random_image)
               imgur_link = imgur_array[0]
-              puts("imageur: "+imgur_link[0].to_s)
+              #puts("Imageur: "+imgur_link[0].to_s)
               #delete_hash = imgur_array[1]      
               #Imgur.deleteImagur(delete_hash[0])   
         #get old node png and append to end of data
@@ -106,7 +111,7 @@ while (input != "quit")
         if fileExists == 1 then
             
             nodeData = Stegg.imageDeSteg(key, downloadPath)
-            puts("Image Data: #{nodeData}")  
+            #puts("Image Data: #{nodeData}")  
             end
         #if node file does not exists then just create it with the new url list
         #save both link locations to end of txt file
@@ -124,7 +129,12 @@ while (input != "quit")
     end
     if input == "read" then
         # Print a text prompt
-        print("Please Wait...\n ")
+        print("Please Wait...\n")
+        # If the images directory does not exist
+        if (!File.directory?('./images'))
+            # Create the images directory
+            FileUtils.mkdir('./images/')
+        end
         nodePng = "node.png"
         downloadPath = "./images/node.png"
         #get old node png and append to end of data
@@ -132,14 +142,40 @@ while (input != "quit")
         nodeData = ""
         # if file exists then download it and get the url list
         if fileExists == 1 then
-            
             nodeData = Stegg.imageDeSteg(key, downloadPath)
-            puts("Image Data: #{nodeData}")  
+            nodeArray = nodeData.split(/\n/)
+            nodeArray.each do |line|
+                urlArray = line.split(/\t/)
+                #puts("Imageshack: "+ urlArray[0])
+                #puts("Imgur: "+ urlArray[1])
+                # Desteggo the data from the image
+                imageCount = 1
+                imagePath = "./images/" + imageCount.to_s() + ".png"
+                # imagesshack url
+                url = urlArray[0].to_s
+                uri = URI.parse(url)
+                http = Net::HTTP.new(uri.host, uri.port)
+                http.use_ssl = true if uri.scheme == "https"
+                http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+                http.start {
+                    http.request_get(uri.path) {|res|
+                        File.open(imagePath,'wb') { |f|
+                            f.write(res.body)
+                        }
+                    }
+                }
+
+                
+                data = Stegg.imageDeSteg(key, imagePath)
+                puts("> #{data}")  
+                imageCount = imageCount+1
+                 end 
+
+            
+            
         end
         #if node file does not exists then just create it with the new url list
-              # Desteggo the data from the image
-        # data = Stegg.imageDeSteg(key, "./images/" + random_image)
-        #     puts("Image Data: #{data}")         
+       
 
   end
     
