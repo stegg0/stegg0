@@ -6,7 +6,6 @@
 
 require './lib/images'
 require './lib/stegg'
-require './lib/aescrypt'
 require './lib/imageshack'
 require './lib/imgur'
 require './lib/ftp'
@@ -17,7 +16,6 @@ require 'uri'
 
 include Images
 include Stegg
-include AESCrypt
 include Imageshack
 include Imgur
 include Ftp
