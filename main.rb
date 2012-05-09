@@ -24,28 +24,26 @@ include Ftp
 
 
 def message
-# Variables
+  
+# - to do: we need to create a config file 
+# Variables for ftp server
 ftpServer = "ftp.drivehq.com"
 ftpUser = "stegg0"
 ftpPass = "stegg0"
 ftpDir = "\\stegg0"
-    
-    
-    
-
-    
     
 # Counter for image file names
 counter = 1
     
 # Get the image repository type
 puts("\n--------------------------------------\n")
-puts("IM Selection...")
+puts("Message Selection...")
 puts("* c -> comment")
 puts("* r -> read")
 puts("* b -> back")
 puts("* q -> quit")
-puts("* ")
+puts("*")
+puts("--------------------------------------\n")
 # Print a text prompt
 print("SELECT> ")
 # Get user input
@@ -221,12 +219,13 @@ while (input != "q")
   end
     #end while loop
     puts("\n--------------------------------------\n")
-    puts("IM Selection...")
+    puts("Message Selection...")
     puts("* c -> comment")
     puts("* r -> read")
     puts("* b -> back")
     puts("* q -> quit")
-    puts("* ")
+    puts("*")
+    puts("--------------------------------------\n")
     # Print a text prompt
     print("SELECT> ")
     # Get user input
@@ -244,11 +243,12 @@ end
 ################################################
 
 puts("\n--------------------------------------\n")
-puts("Main Selection...")
+puts("Main Menu Selection...")
 puts("* m -> message")
 puts("* d -> drop")# - to do add data drop functionality
 puts("* q -> quit")
-puts("* ")
+puts("*")
+puts("--------------------------------------\n")
 # Print a text prompt
 print("SELECT> ")
 # Get user input
@@ -275,11 +275,12 @@ while (input != "q")
         exit
     end
     puts("\n--------------------------------------\n")
-    puts("Main Selection...")
+    puts("Main Menu Selection...")
     puts("* m -> message")
     puts("* d -> drop")# - to do add data drop functionality
     puts("* q -> quit")
-    puts("* ")
+    puts("*")
+    puts("--------------------------------------\n")
     # Print a text prompt
     print("SELECT> ")
     # Get user input
