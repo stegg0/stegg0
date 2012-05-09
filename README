@@ -31,6 +31,7 @@ Required Ruby Gems
 ------------------
 The following Ruby gems are required to be installed in order for this tool to work properly:
 
+* gem install rmagick
 * gem install rest-client
 * gem install xml-simple
 * gem install gibberish
