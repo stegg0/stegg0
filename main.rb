@@ -41,11 +41,6 @@ password = input.split.join("\n")
 
 
 
-# Convert the password into a sufficiently long key
-key = AESCrypt.getKey(password)
-
-
-
 # Counter for image file names
 counter = 1
 # Get the image repository type
@@ -101,7 +96,7 @@ while (input != "quit")
               # TODO: We need to come up with a good way to make sure the data will fit in the image or split it up over multiple images
               
               # Steggo the data in the image and get the random image name returned
-              random_image = Stegg.imageSteg(input, key, pngName)
+              random_image = Stegg.imageSteg(input, password, pngName)
               random_image = "./images/"+random_image
               # put the image and data on cloud
               imageshack_link =  Imageshack.uploadImage(random_image)
@@ -117,7 +112,7 @@ while (input != "quit")
         # if file exists then download it and get the url list
         if fileExists == 1 then
             
-            nodeData = Stegg.imageDeSteg(key, downloadPath)
+            nodeData = Stegg.imageDeSteg(password, downloadPath)
             #puts("Image Data: #{nodeData}")  
             end
         #if node file does not exists then just create it with the new url list
@@ -127,7 +122,7 @@ while (input != "quit")
         #puts(newNodeData)
               counter = counter+1
               nodePngTemp = "./images/" + counter.to_s() + ".png"
-              node_image = Stegg.imageSteg(newNodeData, key, nodePngTemp)
+              node_image = Stegg.imageSteg(newNodeData, password, nodePngTemp)
               node_image = "./images/"+node_image
         #upload the new node file
         Ftp.ftpUpload(ftpServer, ftpUser, ftpPass, ftpDir, node_image, nodePng)
@@ -151,7 +146,7 @@ while (input != "quit")
         nodeData = ""
         # if file exists then download it and get the url list
         if fileExists == 1 then
-            nodeData = Stegg.imageDeSteg(key, downloadPath)
+            nodeData = Stegg.imageDeSteg(password, downloadPath)
             nodeArray = nodeData.split(/\n/)
             nodeArray.each do |line|
                 urlArray = line.split(/\t/)
@@ -177,7 +172,7 @@ while (input != "quit")
                 fileExists = File.exist? imagePath
                 #if imageshack had the file then destegg
                     if fileExists == true then
-                        data = Stegg.imageDeSteg(key, imagePath)
+                        data = Stegg.imageDeSteg(password, imagePath)
                         puts(temp_username+"> #{data}")  
                         imageCount = imageCount+1
                     end
@@ -197,7 +192,7 @@ while (input != "quit")
                         }
                         fileExists = File.exist? imagePath
                         if fileExists == true then
-                            data = Stegg.imageDeSteg(key, imagePath)
+                            data = Stegg.imageDeSteg(password, imagePath)
                             puts(temp_username+"> #{data}")  
                             imageCount = imageCount+1
                         end

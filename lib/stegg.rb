@@ -7,12 +7,9 @@
 
 require './lib/images'
 require 'RMagick'
+require 'gibberish'
 
 include Images
-
-# Global Variables
-$iv = nil
-$cipher_type = "AES-256-CBC"
 
 module Stegg
   
@@ -37,7 +34,7 @@ module Stegg
   end
 
   # FUNCTION: Set the RGB value
-  def imageSteg(data, key, image)
+  def imageSteg(data, password, image)
     # Suck in the image
     original_image = Magick::Image.read(image).first
 
@@ -48,8 +45,9 @@ module Stegg
     # 3 bits (RGB) per pixel
     image_bits = pixels * 3
 
-    # Encrypt the data with the key
-    encrypted_data = AESCrypt.encrypt(data, key, $iv, $cipher_type)
+    # Encrypt the data with the password
+    cipher = Gibberish::AES.new(password)
+    encrypted_data = cipher.encrypt(data, :binary => true)
 
     # Convert the encrypted input to a binary value
     binary = Stegg.convertStringToBinary(encrypted_data)
@@ -59,7 +57,7 @@ module Stegg
     data_bits = Stegg.getBits(binary)
 
     # Encrypt the length bits
-    encrypted_length_bits = AESCrypt.encrypt(data_bits.to_s(), key, $iv, $cipher_type)
+    encrypted_length_bits = cipher.encrypt(data_bits.to_s(), :binary => true)
 
     # Convert the encrypted length bits to a binary value
     # This should be 128 bits using AES encryption
@@ -177,7 +175,7 @@ module Stegg
   end
 
   # FUNCTION: Extract the data
-  def imageDeSteg(key, image)
+  def imageDeSteg(password, image)
     # Suck in the image
     original_image = Magick::Image.read(image).first
 
@@ -216,8 +214,8 @@ module Stegg
     # Initialize the encrypted_length_bits
     encrypted_length_bits = ""
 
-    # For the first 128 characters in the array
-    for counter in (0..127)
+    # For the first 256 characters in the array
+    for counter in (0..255)
       # Append the value to the encrypted_length_bits
       encrypted_length_bits = encrypted_length_bits + bits[counter].to_s()
     end
@@ -226,16 +224,17 @@ module Stegg
     encrypted_length = Stegg.convertBinaryToString(encrypted_length_bits)
 
     # Decrypt the encrypted length
-    length = AESCrypt.decrypt(encrypted_length, key, $iv, $cipher_type)
+    cipher = Gibberish::AES.new(password)
+    length = cipher.decrypt(encrypted_length, :binary => true)
 
     # Initialize the encrypted_data_bits
     encrypted_data_bits = ""
 
-    # Data starts at 128 and goes through the length
-    last_bit = 127 + length.to_i()
+    # Data starts at 256 and goes through the length
+    last_bit = 255 + length.to_i()
  
-    # For character 128 through the last bit
-    for counter in (128..last_bit)
+    # For character 256 through the last bit
+    for counter in (256..last_bit)
       # Append the value to the encrypted_data_bits
       encrypted_data_bits = encrypted_data_bits + bits[counter].to_s()
     end
@@ -243,8 +242,8 @@ module Stegg
     # Convert the binary encrypted data bits to a string
     encrypted_data = Stegg.convertBinaryToString(encrypted_data_bits)
 
-    # Decrypte the encrypted data
-    data = AESCrypt.decrypt(encrypted_data, key, $iv, $cipher_type)
+    # Decrypt the encrypted data
+    data = cipher.decrypt(encrypted_data, :binary => true)
 
     # Return the data
     return data
