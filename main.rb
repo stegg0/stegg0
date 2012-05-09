@@ -24,6 +24,7 @@ include Ftp
 
 
 
+<<<<<<< HEAD
 # Variables
 ftpServer = "ftp.drivehq.com"
 ftpUser = "stegg0"
@@ -41,6 +42,34 @@ password = input.split.join("\n")
 
 # Counter for image file names
 counter = 1
+=======
+def message
+    # Variables
+    iv = nil
+    cipher_type = "AES-256-CBC"
+    ftpServer = "ftp.drivehq.com"
+    ftpUser = "stegg0"
+    ftpPass = "stegg0"
+    ftpDir = "\\stegg0"
+    
+    
+    
+    # Get the shared secret password
+    print("ENTER THE SHARED SECRET KEY> ")
+    input = gets
+    password = input.split.join("\n")
+    
+    
+    
+    # Convert the password into a sufficiently long key
+    key = AESCrypt.getKey(password)
+    
+    
+    
+    # Counter for image file names
+    counter = 1
+    
+>>>>>>> Minor changes
 # Get the image repository type
 puts("\n--------------------------------------\n")
 puts("IM Selection...")
@@ -51,6 +80,7 @@ puts("* ")
 
 # While the user does not enter "quit" followed by a return character
 while (input != "quit")
+    
     # Print a text prompt
     print("SELECT> ")
   # Get user input
@@ -215,3 +245,48 @@ while (input != "quit")
     puts("* quit")
     puts("* ")
 end
+    end
+
+
+
+
+
+puts("\n--------------------------------------\n")
+puts("Main Selection...")
+puts("* message")
+puts("* drop")# - to do add data drop functionality
+puts("* quit")
+puts("* ")
+# Print a text prompt
+print("SELECT> ")
+# Get user input
+input = gets.chomp
+# While the user does not enter "quit" followed by a return character
+while (input != "quit")
+
+    
+    # If the user enters "quit" followed by a return character
+    if input == "quit" then
+        
+        puts("Quitting...")
+        FileUtils.rm_rf("images/", secure: true)
+        exit
+    end
+    if input == "message" then
+        
+        puts("Messaging...")
+        message
+    end
+    if input == "drop" then
+        
+        puts("# - to do add data drop functionality")
+        exit
+    end
+    # Print a text prompt
+    print("SELECT> ")
+    # Get user input
+    input = gets.chomp
+end
+
+
+
