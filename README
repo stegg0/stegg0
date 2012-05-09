@@ -33,6 +33,7 @@ The following Ruby gems are required to be installed in order for this tool to w
 
 * gem install rest-client
 * gem install xml-simple
+* gem install gibberish
 
 Future To Do's
 --------------
