@@ -25,8 +25,6 @@ include Ftp
 
 
 # Variables
-iv = nil
-cipher_type = "AES-256-CBC"
 ftpServer = "ftp.drivehq.com"
 ftpUser = "stegg0"
 ftpPass = "stegg0"
