@@ -32,11 +32,7 @@ def message
     
     
     
-    # Get the shared secret password
-    print("ENTER THE SHARED SECRET KEY> ")
-    input = gets
-    password = input.split.join("\n")
-    
+
     
     
     # Counter for image file names
@@ -45,27 +41,31 @@ def message
 # Get the image repository type
 puts("\n--------------------------------------\n")
 puts("IM Selection...")
-puts("* comment")
-puts("* read")
-puts("* quit")
+puts("* c -> comment")
+puts("* r -> read")
+puts("* q -> quit")
 puts("* ")
-
-# While the user does not enter "quit" followed by a return character
-while (input != "quit")
+# Print a text prompt
+print("SELECT> ")
+# Get user input
+input = gets.chomp
     
-    # Print a text prompt
-    print("SELECT> ")
-  # Get user input
-    input = gets.chomp
+# While the user does not enter "quit" followed by a return character
+while (input != "q")
+
 
   # If the user enters "quit" followed by a return character
-    if input == "quit" then
+    if input == "q" then
 
         puts("Quitting...")
         FileUtils.rm_rf("images/", secure: true)
         exit
     end
-    if input == "comment" then
+    if input == "c" then
+        # Get the shared secret password
+        print("ENTER THE SHARED SECRET KEY> ")
+        input = gets
+        password = input.chomp
         # Get a username
         print("ENTER A USERNAME> ")
         username  = gets.chomp
@@ -129,7 +129,11 @@ while (input != "quit")
               
               
     end
-    if input == "read" then
+    if input == "r" then
+        # Get the shared secret password
+        print("ENTER THE SHARED SECRET KEY> ")
+        input = gets
+        password = input.chomp
         # Print a text prompt
         print("ENTER A CHANNEL NAME> ")
         channel  = gets.chomp
@@ -212,10 +216,14 @@ while (input != "quit")
     
     puts("\n--------------------------------------\n")
     puts("IM Selection...")
-    puts("* comment")
-    puts("* read")
-    puts("* quit")
+    puts("* c -> comment")
+    puts("* r -> read")
+    puts("* q -> quit")
     puts("* ")
+    # Print a text prompt
+    print("SELECT> ")
+    # Get user input
+    input = gets.chomp
 end
     end
 
@@ -225,31 +233,31 @@ end
 
 puts("\n--------------------------------------\n")
 puts("Main Selection...")
-puts("* message")
-puts("* drop")# - to do add data drop functionality
-puts("* quit")
+puts("* m -> message")
+puts("* d -> drop")# - to do add data drop functionality
+puts("* q -> quit")
 puts("* ")
 # Print a text prompt
 print("SELECT> ")
 # Get user input
 input = gets.chomp
 # While the user does not enter "quit" followed by a return character
-while (input != "quit")
+while (input != "q")
 
     
     # If the user enters "quit" followed by a return character
-    if input == "quit" then
+    if input == "q" then
         
         puts("Quitting...")
         FileUtils.rm_rf("images/", secure: true)
         exit
     end
-    if input == "message" then
+    if input == "m" then
         
         puts("Messaging...")
         message
     end
-    if input == "drop" then
+    if input == "d" then
         
         puts("# - to do add data drop functionality")
         exit
