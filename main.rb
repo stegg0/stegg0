@@ -27,7 +27,7 @@ def message
   
 # - to do: we need to create a config file 
 # Variables for ftp server
-ftpServer = "ftp.drivehq.com"
+ftpServer = "stegg0.com"
 ftpUser = "stegg0"
 ftpPass = "stegg0"
 ftpDir = "\\stegg0"
