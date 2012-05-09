@@ -21,9 +21,9 @@ module Ftp
         ftp.connect(ftpServer,21)
         
         ftp.login(ftpUser,ftpPass)
-        
-        ftp.chdir(ftpDir)
-        
+        if ftpDir != "" then
+            ftp.chdir(ftpDir)
+        end
         ftp.putbinaryfile(ftpLocalFile, ftpRemoteFile)
         
         ftp.close
@@ -38,7 +38,9 @@ module Ftp
         
         ftp.login(ftpUser,ftpPass)
         
-        ftp.chdir(ftpDir)
+        if ftpDir != "" then
+            ftp.chdir(ftpDir)
+        end
         files = ftp.list(ftpRemoteFile)
         if(files[0])
         ftp.getbinaryfile(ftpRemoteFile, ftpLocalFile)

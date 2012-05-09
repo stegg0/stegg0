@@ -30,7 +30,7 @@ def message
 ftpServer = "stegg0.com"
 ftpUser = "stegg0"
 ftpPass = "stegg0"
-ftpDir = "\\stegg0"
+ftpDir = ""
     
 # Counter for image file names
 counter = 1
