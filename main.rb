@@ -24,7 +24,6 @@ include Ftp
 
 
 
-<<<<<<< HEAD
 # Variables
 ftpServer = "ftp.drivehq.com"
 ftpUser = "stegg0"
@@ -42,7 +41,6 @@ password = input.split.join("\n")
 
 # Counter for image file names
 counter = 1
-=======
 def message
     # Variables
     ftpServer = "ftp.drivehq.com"
@@ -62,7 +60,6 @@ def message
     # Counter for image file names
     counter = 1
     
->>>>>>> Minor changes
 # Get the image repository type
 puts("\n--------------------------------------\n")
 puts("IM Selection...")
