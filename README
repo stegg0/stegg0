@@ -32,9 +32,9 @@ Required Ruby Gems
 The following Ruby gems are required to be installed in order for this tool to work properly:
 
 * gem install rmagick
+* gem install gibberish
 * gem install rest-client
 * gem install xml-simple
-* gem install gibberish
 
 Future To Do's
 --------------
@@ -43,3 +43,5 @@ Future To Do's
 * Could add a random offset of the data in the image if the data size is sufficiently smaller than the image size.
 
 * Need to add code to rotate through the images we download instead of just using the first image.
+
+* Need to place some sort of a lock on the index node to prevent two users from modifying it at once.
