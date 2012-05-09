@@ -45,8 +45,6 @@ counter = 1
 =======
 def message
     # Variables
-    iv = nil
-    cipher_type = "AES-256-CBC"
     ftpServer = "ftp.drivehq.com"
     ftpUser = "stegg0"
     ftpPass = "stegg0"
@@ -58,11 +56,6 @@ def message
     print("ENTER THE SHARED SECRET KEY> ")
     input = gets
     password = input.split.join("\n")
-    
-    
-    
-    # Convert the password into a sufficiently long key
-    key = AESCrypt.getKey(password)
     
     
     
