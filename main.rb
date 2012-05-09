@@ -22,23 +22,7 @@ include Ftp
 
 
 
-# Variables
-ftpServer = "ftp.drivehq.com"
-ftpUser = "stegg0"
-ftpPass = "stegg0"
-ftpDir = "\\stegg0"
 
-
-
-# Get the shared secret password
-print("ENTER THE SHARED SECRET KEY> ")
-input = gets
-password = input.split.join("\n")
-
-
-
-# Counter for image file names
-counter = 1
 def message
     # Variables
     ftpServer = "ftp.drivehq.com"
