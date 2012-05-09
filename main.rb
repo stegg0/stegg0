@@ -24,25 +24,26 @@ include Ftp
 
 
 def message
-    # Variables
-    ftpServer = "ftp.drivehq.com"
-    ftpUser = "stegg0"
-    ftpPass = "stegg0"
-    ftpDir = "\\stegg0"
+# Variables
+ftpServer = "ftp.drivehq.com"
+ftpUser = "stegg0"
+ftpPass = "stegg0"
+ftpDir = "\\stegg0"
     
     
     
 
     
     
-    # Counter for image file names
-    counter = 1
+# Counter for image file names
+counter = 1
     
 # Get the image repository type
 puts("\n--------------------------------------\n")
 puts("IM Selection...")
 puts("* c -> comment")
 puts("* r -> read")
+puts("* b -> back")
 puts("* q -> quit")
 puts("* ")
 # Print a text prompt
@@ -50,17 +51,25 @@ print("SELECT> ")
 # Get user input
 input = gets.chomp
     
-# While the user does not enter "quit" followed by a return character
+# While the user does not enter "q" followed by a return character
 while (input != "q")
 
 
-  # If the user enters "quit" followed by a return character
+  # If the user enters "q" followed by a return character
     if input == "q" then
 
         puts("Quitting...")
         FileUtils.rm_rf("images/", secure: true)
         exit
     end
+    # if 'b' return to main menu
+    if input == "b" then
+        
+        puts("Main Menu...")
+        FileUtils.rm_rf("images/", secure: true)
+        return
+    end
+    # if 'c' then comment is selected
     if input == "c" then
         # Get the shared secret password
         print("ENTER THE SHARED SECRET KEY> ")
@@ -83,29 +92,29 @@ while (input != "q")
         # Resize the images by a random value to make them different from the original
         Images.resizeImages
         
-              # Print a text prompt
-              print("TEXT> ")
+        # Print a text prompt
+        print("TEXT> ")
               
-              # Get user input
-              input = gets.chomp
-              print("Stegg0ing Please Wait...\n")
-              # Get the current image name
-              pngName = "./images/" + counter.to_s() + ".png"
-              nodePng = channel+".png"
-              downloadPath = "./images/"+channel
-              # TODO: We need to come up with a good way to make sure the data will fit in the image or split it up over multiple images
+        # Get user input
+        input = gets.chomp
+        print("Stegg0ing Please Wait...\n")
+        # Get the current image name
+        pngName = "./images/" + counter.to_s() + ".png"
+        nodePng = channel+".png"
+        downloadPath = "./images/"+channel
+        # TODO: We need to come up with a good way to make sure the data will fit in the image or split it up over multiple images
               
-              # Steggo the data in the image and get the random image name returned
-              random_image = Stegg.imageSteg(input, password, pngName)
-              random_image = "./images/"+random_image
-              # put the image and data on cloud
-              imageshack_link =  Imageshack.uploadImage(random_image)
-              #puts("Imageshack: "+imageshack_link[0].to_s)
-              imgur_array = Imgur.uploadImagur(random_image)
-              imgur_link = imgur_array[0]
-              #puts("Imageur: "+imgur_link[0].to_s)
-              #delete_hash = imgur_array[1]      
-              #Imgur.deleteImagur(delete_hash[0])   
+        # Steggo the data in the image and get the random image name returned
+        random_image = Stegg.imageSteg(input, password, pngName)
+        random_image = "./images/"+random_image
+        # put the image and data on cloud
+        imageshack_link =  Imageshack.uploadImage(random_image)
+        #puts("Imageshack: "+imageshack_link[0].to_s)
+        imgur_array = Imgur.uploadImagur(random_image)
+        imgur_link = imgur_array[0]
+        #puts("Imageur: "+imgur_link[0].to_s)
+        #delete_hash = imgur_array[1]      
+        #Imgur.deleteImagur(delete_hash[0])   
         #get old node png and append to end of data
         fileExists = Ftp.ftpDownload(ftpServer, ftpUser, ftpPass, ftpDir, downloadPath, nodePng)
         nodeData = ""
@@ -114,21 +123,22 @@ while (input != "q")
             
             nodeData = Stegg.imageDeSteg(password, downloadPath)
             #puts("Image Data: #{nodeData}")  
-            end
+        end
         #if node file does not exists then just create it with the new url list
         #save both link locations to end of txt file
-              comment_links = imageshack_link[0].to_s+"\t"+imgur_link[0].to_s+"\t"+username+"\n"
-              newNodeData = nodeData+comment_links
+        comment_links = imageshack_link[0].to_s+"\t"+imgur_link[0].to_s+"\t"+username+"\n"
+        newNodeData = nodeData+comment_links
         #puts(newNodeData)
-              counter = counter+1
-              nodePngTemp = "./images/" + counter.to_s() + ".png"
-              node_image = Stegg.imageSteg(newNodeData, password, nodePngTemp)
-              node_image = "./images/"+node_image
+        counter = counter+1
+        nodePngTemp = "./images/" + counter.to_s() + ".png"
+        node_image = Stegg.imageSteg(newNodeData, password, nodePngTemp)
+        node_image = "./images/"+node_image
         #upload the new node file
         Ftp.ftpUpload(ftpServer, ftpUser, ftpPass, ftpDir, node_image, nodePng)
               
               
     end
+    #if 'r' then read from data channel
     if input == "r" then
         # Get the shared secret password
         print("ENTER THE SHARED SECRET KEY> ")
@@ -152,6 +162,7 @@ while (input != "q")
         if fileExists == 1 then
             nodeData = Stegg.imageDeSteg(password, downloadPath)
             nodeArray = nodeData.split(/\n/)
+            # for each line in the node file split on the tab and get data
             nodeArray.each do |line|
                 urlArray = line.split(/\t/)
                 #puts("Imageshack: "+ urlArray[0])
@@ -205,19 +216,15 @@ while (input != "q")
                         end
                     end
                 end 
-
-            
-            
         end
-        #if node file does not exists then just create it with the new url list
-       
 
   end
-    
+    #end while loop
     puts("\n--------------------------------------\n")
     puts("IM Selection...")
     puts("* c -> comment")
     puts("* r -> read")
+    puts("* b -> back")
     puts("* q -> quit")
     puts("* ")
     # Print a text prompt
@@ -225,11 +232,16 @@ while (input != "q")
     # Get user input
     input = gets.chomp
 end
-    end
+#end of def message
+end
 
 
 
-
+################################################
+# Main                                         #
+#----------------------------------------------#
+#                                              #
+################################################
 
 puts("\n--------------------------------------\n")
 puts("Main Selection...")
@@ -262,11 +274,17 @@ while (input != "q")
         puts("# - to do add data drop functionality")
         exit
     end
+    puts("\n--------------------------------------\n")
+    puts("Main Selection...")
+    puts("* m -> message")
+    puts("* d -> drop")# - to do add data drop functionality
+    puts("* q -> quit")
+    puts("* ")
     # Print a text prompt
     print("SELECT> ")
     # Get user input
     input = gets.chomp
 end
 
-
+# end main
 
